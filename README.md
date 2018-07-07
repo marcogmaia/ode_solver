@@ -18,7 +18,7 @@ A entrada é dada na forma
 A expressão pode ser escrita da mesma forma que python entende as funções matemáticas
 
 ### Exemplo de entrada:
->0, 1, 2, 0.01, 1-x+4*y
+>0, 1, 2, 0.01, 1-x+4*y  
 >0, 1, 2, 3, 4
 
 ----------
