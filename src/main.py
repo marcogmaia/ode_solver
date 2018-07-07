@@ -413,7 +413,8 @@ class Methods:
     # fazer o programa plotar agora
     def plot(self):
         print(f'{self.method_name+":":<22} f({self.x[-1]}) = {self.yf[-1]}')
-        plt.plot(self.x, self.yf)
+        plt.plot(self.x, self.yf, label=self.method_name)
+        plt.legend()
         # plt.show()
 
 
