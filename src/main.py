@@ -4,11 +4,14 @@
 import matplotlib.pyplot as plt
 import parser
 import numpy
+from prettytable import PrettyTable
 from math import *
+
+table = PrettyTable()
 
 
 class Methods:
-    def __init__(self, x0, y0, xf, h, edoFunc):
+    def __init__(self, x0, y0, xf, h, edoFunc, exact=None):
         self.method_name = None
         self.x0 = x0
         self.y0 = y0
@@ -20,6 +23,20 @@ class Methods:
         self.y[0] = self.y0
         self.h = h
         self.func = parser.expr(edoFunc).compile()
+        self.exact = exact       # contains the exact values of x_i (list)
+        if exact:
+            self.exact = parser.expr(exact).compile()
+            self.exact = self.exact_eval()
+        table.add_column('x', self.x)
+        self.errors = []
+
+    def exact_eval(self):
+        # x = self.xf
+        xs = self.x.copy()
+        for i, x in enumerate(xs):
+            xs[i] = eval(self.exact)
+        return xs
+        # return eval(self.exact)
 
     def f(self, x, y):
         return eval(self.func)
@@ -36,7 +53,7 @@ class Methods:
     # the implicit equation needs to be solved.
     def eulerInverse(self):
         y = self.y
-        self.euler() # yf contains the return of the euler method.
+        self.euler()       # yf contains the return of the euler method.
         self.method_name = 'Backwards Euler'
         yp = self.yf
         for i in range(1, self.n):
@@ -415,6 +432,12 @@ class Methods:
         print(f'{self.method_name+":":<22} f({self.x[-1]}) = {self.yf[-1]}')
         plt.plot(self.x, self.yf, label=self.method_name)
         plt.legend()
+
+        # erro = [self.yf[i] - self.exact[i] for i in range(len(self.x))]
+        # print(erro)
+        table.add_column(self.method_name, self.yf)
+        if self.exact is not None:
+            self.errors.append(self.yf[-1] - self.exact[-1])
         # plt.show()
 
 
@@ -423,7 +446,7 @@ if __name__ == "__main__":
     print('ex: x0, y0, xf, h, mathExpr')
     s = input()
     s = s.replace(' ', '').split(',')
-    entrada = [float(i) for i in s[:4]] + [s[4]]
+    entrada = [float(i) for i in s[:4]] + s[4:]
     print('opções:')
     print('0: Euler')
     print('1: Euler Inverso')
@@ -445,8 +468,12 @@ if __name__ == "__main__":
     # print('q: sair')
     # while opFunc != 'q':
     func = Methods(*entrada)
+
     print(f'y({func.x0}) = {func.y0}; h = {func.h}; expr = {entrada[4]}')
     lista_metodos = input().replace(' ', '').split(',')
+    if func.exact is not None:
+        print(f'valor exato f({func.xf}) = {func.exact[-1]}')
+        table.add_column('Valor exato', func.exact)
     for opFunc in lista_metodos:
         # opFunc = input("Qual método numérico você quer visualizar?\n")
         if opFunc == '0':
@@ -501,4 +528,7 @@ if __name__ == "__main__":
             print('saindo...')
         else:
             print(f'{opFunc}: Operação inválida.')
+    if func.exact is not None:
+        table.add_row(['errors'] + [0] + func.errors)
+    print(table)
     plt.show()
