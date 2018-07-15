@@ -27,6 +27,7 @@ class Methods:
         if exact:
             self.exact = parser.expr(exact).compile()
             self.exact = self.exact_eval()
+            plt.plot(self.x, self.exact, label='Exact')
         table.add_column('x', self.x)
         self.errors = []
 
