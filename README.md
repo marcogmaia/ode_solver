@@ -9,13 +9,14 @@ Implementação de alguns metódos numéricos em python
 Assim que iniciar o programa, será dado a forma da entrada
 e uma lista com as opções dos métodos
 A entrada é dada na forma 
->x0, y0, xf, step_size, mathExpr  
+>x0, y0, xf, step_size, mathExpr, [exactExpr]  
 >lista dos métodos separados por vírgula
 - **x0**: valor de x inicial
 - **y0**: valor de y inicial
 - **xf**: valor final de x0
 - **step_size**: tamando do passo entre xi e xi+1; valor do `h`
-- **mathExpr**: função matemática onde dy/dx = mathExpr  
+- **mathExpr**: função matemática onde dy/dx = mathExpr
+- **exactExpr**: solução analítica da equação diferencial (parâmentro opcional)  
 A expressão pode ser escrita da mesma forma que python entende as funções matemáticas
 
 ### Exemplo de entrada:
